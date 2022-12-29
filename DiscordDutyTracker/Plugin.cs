@@ -4,6 +4,7 @@ using Dalamud.Plugin;
 using System.IO;
 using System.Reflection;
 using Dalamud.Interface.Windowing;
+using DiscordDutyTracker.Util;
 using DiscordDutyTracker.Windows;
 
 namespace DiscordDutyTracker
@@ -16,7 +17,9 @@ namespace DiscordDutyTracker
         private DalamudPluginInterface PluginInterface { get; init; }
         private CommandManager CommandManager { get; init; }
         public Configuration Configuration { get; init; }
-        public WindowSystem WindowSystem = new("SamplePlugin");
+        public WindowSystem WindowSystem = new("DiscordDutyTracker");
+        
+        private DutyTracker _tracker { get; set; }
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
@@ -25,35 +28,38 @@ namespace DiscordDutyTracker
             this.PluginInterface = pluginInterface;
             this.CommandManager = commandManager;
 
+            pluginInterface.Create<ServiceHolder>();
+
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             this.Configuration.Initialize(this.PluginInterface);
 
-            // you might normally want to embed resources and load them from the manifest stream
-            var imagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "goat.png");
-            var goatImage = this.PluginInterface.UiBuilder.LoadImage(imagePath);
-
             WindowSystem.AddWindow(new ConfigWindow(this));
-            WindowSystem.AddWindow(new MainWindow(this, goatImage));
 
             this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
-                HelpMessage = "A useful message to display in /xlhelp"
+                HelpMessage = "Opens the Discord Duty Tracker configuration."
             });
 
             this.PluginInterface.UiBuilder.Draw += DrawUI;
             this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
+
+            _tracker = new DutyTracker();
+            _tracker.Start();
         }
 
         public void Dispose()
         {
+            _tracker.Dispose();
             this.WindowSystem.RemoveAllWindows();
             this.CommandManager.RemoveHandler(CommandName);
         }
 
         private void OnCommand(string command, string args)
         {
-            // in response to the slash command, just display our main ui
-            WindowSystem.GetWindow("My Amazing Window").IsOpen = true;
+            if (args == "config")
+            {
+                DrawConfigUI();
+            }
         }
 
         private void DrawUI()
@@ -63,7 +69,7 @@ namespace DiscordDutyTracker
 
         public void DrawConfigUI()
         {
-            WindowSystem.GetWindow("A Wonderful Configuration Window").IsOpen = true;
+            WindowSystem.GetWindow("Discord Duty Tracker: Configuration").IsOpen = true;
         }
     }
 }

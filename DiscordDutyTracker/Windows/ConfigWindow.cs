@@ -11,12 +11,10 @@ public class ConfigWindow : Window, IDisposable
 
     public ConfigWindow(Plugin plugin) : base(
         "Discord Duty Tracker: Configuration",
-        ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
+        ImGuiWindowFlags.AlwaysAutoResize| ImGuiWindowFlags.NoResize |
+        ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
         ImGuiWindowFlags.NoScrollWithMouse)
     {
-        this.Size = new Vector2(232, 75);
-        this.SizeCondition = ImGuiCond.Always;
-
         this.Configuration = plugin.Configuration;
     }
 
@@ -24,13 +22,47 @@ public class ConfigWindow : Window, IDisposable
 
     public override void Draw()
     {
-        // can't ref a property, so use a local copy
-        var configValue = this.Configuration.SomePropertyToBeSavedAndWithADefault;
-        if (ImGui.Checkbox("Random Config Bool", ref configValue))
+        // I'm sorry lmao
         {
-            this.Configuration.SomePropertyToBeSavedAndWithADefault = configValue;
-            // can save immediately on change, if you don't want to provide a "Save and Close" button
-            this.Configuration.Save();
+            var config = Configuration.WebhookURL;
+            if (ImGui.InputText("Webhook URL", ref config, 2048u))
+            {
+                Configuration.WebhookURL = config;
+            }
+        }
+        {
+            var config = Configuration.DutyEnteredTemplate;
+            if (ImGui.InputText("Template: Duty Entered", ref config, 2048u))
+            {
+                Configuration.DutyEnteredTemplate = config;
+            }
+        }
+        {
+            var config = Configuration.DutyCompletedTemplate;
+            if (ImGui.InputText("Template: Duty Complete", ref config, 2048u))
+            {
+                Configuration.DutyCompletedTemplate = config;
+            }
+        }
+        {
+            var config = Configuration.DutyCompletedFirstTimeTemplate;
+            if (ImGui.InputText("Template: Duty Complete (First Time)", ref config, 2048u))
+            {
+                Configuration.DutyCompletedFirstTimeTemplate = config;
+            }
+        }
+        {
+            var config = Configuration.DutyEndedTemplate;
+            if (ImGui.InputText("Template: Duty Ended (Incomplete)", ref config, 2048u))
+            {
+                Configuration.DutyEndedTemplate = config;
+            }
+        }
+
+        if (ImGui.Button("Save and close"))
+        {
+            Configuration.Save();
+            IsOpen = false;
         }
     }
 }

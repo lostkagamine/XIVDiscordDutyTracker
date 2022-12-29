@@ -9,7 +9,11 @@ namespace DiscordDutyTracker
     {
         public int Version { get; set; } = 0;
 
-        public bool SomePropertyToBeSavedAndWithADefault { get; set; } = true;
+        public string WebhookURL { get; set; } = "";
+        public string DutyEnteredTemplate { get; set; } = "";
+        public string DutyEndedTemplate { get; set; } = "";
+        public string DutyCompletedTemplate { get; set; } = "";
+        public string DutyCompletedFirstTimeTemplate { get; set; } = "";
 
         // the below exist just to make saving less cumbersome
         [NonSerialized]
