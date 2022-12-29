@@ -1,0 +1,13 @@
+{
+  "Author": "Rika (@lostkagamine)",
+  "Name": "Discord Duty Tracker",
+  "Punchline": "Track your duties using a Discord webhook.",
+  "Description": "Discord Duty Tracker will post a message to Discord when you enter a duty, complete it, or leave for other reasons. Use /ddt to open the UI.",
+  "InternalName": "discordDutyTracker",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "duty",
+    "tracking",
+    "discord"
+  ]
+}
