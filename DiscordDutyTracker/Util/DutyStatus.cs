@@ -34,8 +34,10 @@ namespace DiscordDutyTracker.Util
         public event DutyDelegate? OnDutyReset;
         public event DutyDelegate? OnDutyWipe;
 
-        public DutyStatus()
+        DutyStatus()
         {
+            SignatureHelper.Initialise(this);
+
             ServiceHolder.ClientState.TerritoryChanged += OnTerritoryChange;
         }
 
