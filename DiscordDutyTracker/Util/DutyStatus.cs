@@ -72,7 +72,7 @@ namespace DiscordDutyTracker.Util
         }
 
         private static DutyStatus? _Instance = null!;
-        public static DutyStatus Instance => _Instance ?? new();
+        public static DutyStatus Instance => _Instance ??= new();
 
         private byte DutyEventFunction(void* a1, void* a2, ushort* a3)
         {

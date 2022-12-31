@@ -21,6 +21,8 @@ namespace DiscordDutyTracker
         
         private DutyTracker _tracker { get; set; }
 
+        private ServiceHolder _holder { get; set; }
+
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
             [RequiredVersion("1.0")] CommandManager commandManager)
@@ -28,7 +30,7 @@ namespace DiscordDutyTracker
             this.PluginInterface = pluginInterface;
             this.CommandManager = commandManager;
 
-            pluginInterface.Create<ServiceHolder>();
+            _holder = pluginInterface.Create<ServiceHolder>();
 
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             this.Configuration.Initialize(this.PluginInterface);

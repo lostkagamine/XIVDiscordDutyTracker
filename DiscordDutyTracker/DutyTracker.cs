@@ -30,10 +30,9 @@ namespace DiscordDutyTracker
 
         public void Dispose()
         {
-            ServiceHolder.ChatGui.Print("DutyTracker.Dispose");
-
             DutyStatus.Instance.OnEnterDuty -= OnEnterDuty;
             DutyStatus.Instance.OnLeaveDuty -= OnLeaveDuty;
+
             DutyStatus.Instance.Dispose();
         }
     }
