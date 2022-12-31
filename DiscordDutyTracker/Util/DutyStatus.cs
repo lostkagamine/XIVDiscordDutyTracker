@@ -37,6 +37,7 @@ namespace DiscordDutyTracker.Util
         DutyStatus()
         {
             SignatureHelper.Initialise(this);
+            DutyEventHook?.Enable();
 
             ServiceHolder.ClientState.TerritoryChanged += OnTerritoryChange;
         }
@@ -71,7 +72,6 @@ namespace DiscordDutyTracker.Util
                 // Duty has begun.
                 CurrentDuty = duty;
                 IsInInstance = true;
-                OnEnterDuty?.Invoke(duty);
             }
         }
 
@@ -91,6 +91,7 @@ namespace DiscordDutyTracker.Util
                         // Duty start
                         case 0x40000001:
                             IsInDuty = true;
+                            OnEnterDuty?.Invoke(CurrentDuty);
                             break;
                         // Wipe
                         case 0x40000005:
