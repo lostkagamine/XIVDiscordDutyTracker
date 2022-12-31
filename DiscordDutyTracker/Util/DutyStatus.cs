@@ -60,7 +60,11 @@ namespace DiscordDutyTracker.Util
                 }
                 // The duty has ended.
                 IsInInstance = false;
-                OnLeaveDuty?.Invoke(CurrentDuty);
+                if (!IsDutyCompleted)
+                {
+                    OnLeaveDuty?.Invoke(CurrentDuty);
+                }
+                IsDutyCompleted = false;
             }
             else
             {

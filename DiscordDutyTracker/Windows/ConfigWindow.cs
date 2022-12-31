@@ -15,7 +15,7 @@ public class ConfigWindow : Window, IDisposable
         ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
         ImGuiWindowFlags.NoScrollWithMouse)
     {
-        this.Configuration = plugin.Configuration;
+        this.Configuration = Plugin.Configuration;
     }
 
     public void Dispose() { }

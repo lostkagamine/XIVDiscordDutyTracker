@@ -16,7 +16,7 @@ namespace DiscordDutyTracker
 
         private DalamudPluginInterface PluginInterface { get; init; }
         private CommandManager CommandManager { get; init; }
-        public Configuration Configuration { get; init; }
+        public static Configuration Configuration { get; private set; }
         public WindowSystem WindowSystem = new("DiscordDutyTracker");
         
         private DutyTracker _tracker { get; set; }
@@ -32,8 +32,8 @@ namespace DiscordDutyTracker
 
             _holder = pluginInterface.Create<ServiceHolder>();
 
-            this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-            this.Configuration.Initialize(this.PluginInterface);
+            Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+            Configuration.Initialize(this.PluginInterface);
 
             WindowSystem.AddWindow(new ConfigWindow(this));
 
@@ -44,6 +44,9 @@ namespace DiscordDutyTracker
 
             this.PluginInterface.UiBuilder.Draw += DrawUI;
             this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
+
+            CharaNameUtil.Instance.InstallListeners();
+            CharaNameUtil.Instance.InstallTemporaryListener();
 
             _tracker = new DutyTracker();
             _tracker.Start();
